@@ -1,9 +1,12 @@
 import java.util.Scanner;
 
-public class TCA_AgndCConsulta {
+public class consulta {
     final static Scanner LER = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+  final String [] MESES={"janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro","dezembro"};
+ final String [] DIAS={"domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira ", "sábado"};
 
         imprimirMenu();
 
@@ -218,5 +221,17 @@ public class TCA_AgndCConsulta {
 
         System.out.println("O que você deseja fazer?");
     }
+
+      public static String printDate (String[][]paginas,final String[]DIAS){
+      for (int i = 0; i < paginas.length; i++) {
+       for (int j = 0; j < paginas[0].length; j++) {
+       for (int j2 = 0; j2 < DIAS.length; j2++) {
+            if () {
+                
+            }
+       }
+       }
+      }
+      }
 
 }
