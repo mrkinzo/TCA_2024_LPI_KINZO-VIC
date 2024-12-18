@@ -4,7 +4,10 @@ public class TCA_AgndCConsulta {
     final static Scanner LER = new Scanner(System.in);
 
     public static void main(String[] args) {
-
+        final String[] MESES = { "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto",
+                "setembro", "outubro", "novembro", "dezembro" };
+        final String[] DIAS = { "domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira",
+                "sexta-feira ", "sábado" };
         imprimirMenu();
 
         utilizarFuncoes();
@@ -34,7 +37,7 @@ public class TCA_AgndCConsulta {
 
     }
 
-    public static void consultar(String[][] paginasBkp) {
+    public static void consultar(String[][] paginasBackup) {
         String mes = null;
         String dia = null;
         String tipo = null;
@@ -49,9 +52,9 @@ public class TCA_AgndCConsulta {
         if (definirTipo) {
             System.out.println("le o tipo");// ----
             tipo = lerTipo();
-            imprimirComOTipo(paginasBkp, mes, dia, tipo);
+            imprimirComOTipo(paginasBackup, mes, dia, tipo);
         } else {
-            imprimirRegistro(paginasBkp, mes, dia);
+            imprimirRegistro(paginasBackup, mes, dia);
         }
 
     }
@@ -78,14 +81,14 @@ public class TCA_AgndCConsulta {
         return comando;
     }
 
-    public static void imprimirComOTipo(String[][] paginasBkp, String mes, String dia, String tipo) {
+    public static void imprimirComOTipo(String[][] paginasBackup, String mes, String dia, String tipo) {
 
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes.equals(paginasBkp[i][0])) {
-                if (dia.equals(paginasBkp[i][1])) {
-                    if (tipo.equals(paginasBkp[i][2])) {
+        for (int i = 0; i < paginasBackup.length; i++) {
+            if (mes.equals(paginasBackup[i][0])) {
+                if (dia.equals(paginasBackup[i][1])) {
+                    if (tipo.equals(paginasBackup[i][2])) {
                         for (int j = 0; j < 4; j++) {
-                            System.out.println(paginasBkp[i][j]);
+                            System.out.println(paginasBackup[i][j]);
                         }
                     }
                 }
@@ -93,12 +96,12 @@ public class TCA_AgndCConsulta {
         }
     }
 
-    public static void imprimirRegistro(String[][] paginasBkp, String mes, String dia) {
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes == paginasBkp[i][0]) {
-                if (dia == paginasBkp[i][1]) {
+    public static void imprimirRegistro(String[][] paginasBackup, String mes, String dia) {
+        for (int i = 0; i < paginasBackup.length; i++) {
+            if (mes == paginasBackup[i][0]) {
+                if (dia == paginasBackup[i][1]) {
                     for (int j = 0; j < 4; j++) {
-                        System.out.println(paginasBkp[i][j]);// """""""""
+                        System.out.println(paginasBackup[i][j]);// """""""""
                     }
                 }
             }
@@ -229,6 +232,11 @@ public class TCA_AgndCConsulta {
         return matrizString;
     }
 
+    public static int[][] criarMatrizInt(int linhas, final int colunas) {
+        int[][] matrizString = new int[linhas][colunas];
+        return matrizString;
+    }
+
     public static int lerNumInt() {
         int x = 0;
         do {
@@ -308,4 +316,69 @@ public class TCA_AgndCConsulta {
         System.out.println("O que você deseja fazer?");
     }
 
+    public static void NumerarDia(String[][] paginasBackup, String[] dias) {
+        Integer dia = 0;
+        for (int i = 0; i < paginasBackup.length; i++) {
+            dia = Integer.parseInt(paginasBackup[i][1]);
+            /*
+             * if (dia == 1) {
+             * paginasBackup[i][1] = "Domingo";
+             * } else {
+             * if (dia == 2) {
+             * paginasBackup[i][1] = "Tegunda";
+             * } else {
+             * if (dia == 3) {
+             * paginasBackup[i][1] = "Terça";
+             * } else {
+             * if (dia == 4) {
+             * 
+             * } else {
+             * if (dia == 5) {
+             * paginasBackup[i][1] = "Quinta";
+             * }
+             * if (dia == 6) {
+             * paginasBackup[i][1] = "Sexta";
+             * } else {
+             * paginasBackup[i][1] = "Sabado";
+             * }
+             * }
+             * }
+             * }
+             * }
+             */
+
+            switch (dia) {
+                case 1:
+                    paginasBackup[i][1] = "Domingo";
+                    break;
+
+                case 2:
+                    paginasBackup[i][1] = "Segunda";
+                    break;
+
+                case 3:
+                    paginasBackup[i][1] = "Terça";
+                    break;
+
+                case 4:
+                    paginasBackup[i][1] = "Quarta";
+                    break;
+
+                case 5:
+                    paginasBackup[i][1] = "Quinta";
+                    break;
+
+                case 6:
+                    paginasBackup[i][1] = "Sexta";
+                    break;
+
+                case 7:
+                    paginasBackup[i][1] = "Sabado";
+                    break;
+            }
+             if (dia>7) {
+                System.out.println("Prezado Senhor USUARIO , Vossa mercê DEVE INSERIR UM DIA DA SEMANA 1~7 !DIAS!");
+             }
+        }
+    }
 }
