@@ -4,10 +4,7 @@ public class TCA_AgndCConsulta {
     final static Scanner LER = new Scanner(System.in);
 
     public static void main(String[] args) {
-        final String[] MESES = { "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto",
-                "setembro", "outubro", "novembro", "dezembro" };
-        final String[] DIAS = { "domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira",
-                "sexta-feira ", "sábado" };
+
         imprimirMenu();
 
         utilizarFuncoes();
@@ -16,7 +13,7 @@ public class TCA_AgndCConsulta {
 
     public static void utilizarFuncoes() {
         int comando = 0;
-        String[][] paginasBackup = criarMatrizString(10, 4);
+        String[][] paginasBackup = criarMatrizString(372, 4); // QTD MAXIMA DE REGISTROS
         do {
             System.out.println("ler comando");// ----------
             comando = lerComandoUsuario();
@@ -31,13 +28,16 @@ public class TCA_AgndCConsulta {
                 case 3:
                     imprimirTutorial();// dividir tuturial dps)
                     break;
+                case 4:
+                    imprimirMenu();
+                    break;
             }
 
         } while (comando != 0);
 
     }
 
-    public static void consultar(String[][] paginasBackup) {
+    public static void consultar(String[][] paginasBkp) {
         String mes = null;
         String dia = null;
         String tipo = null;
@@ -52,11 +52,32 @@ public class TCA_AgndCConsulta {
         if (definirTipo) {
             System.out.println("le o tipo");// ----
             tipo = lerTipo();
-            imprimirComOTipo(paginasBackup, mes, dia, tipo);
+            imprimirComOTipo(paginasBkp, mes, dia, tipo);
         } else {
-            imprimirRegistro(paginasBackup, mes, dia);
+            imprimirRegistro(paginasBkp, mes, dia);
         }
 
+    }
+
+    public static String findDayName(String dia) {
+        String dayName = null;
+        int dayInt = convetSringToInt(dia);
+        if (dayInt == 1 || dayInt == 8 || dayInt == 15 || dayInt == 22 || dayInt == 29) {
+            dayName = "Domingo";
+        } else if (dayInt == 2 || dayInt == 9 || dayInt == 16 || dayInt == 23 || dayInt == 30) {
+            dayName = "Segunda";
+        } else if (dayInt == 3 || dayInt == 10 || dayInt == 17 || dayInt == 24 || dayInt == 31) {
+            dayName = "Terça";
+        } else if (dayInt == 4 || dayInt == 11 || dayInt == 18 || dayInt == 25) {
+            dayName = "Quarta";
+        } else if (dayInt == 5 || dayInt == 12 || dayInt == 19 || dayInt == 26) {
+            dayName = "Quinta";
+        } else if (dayInt == 6 || dayInt == 13 || dayInt == 20 || dayInt == 27) {
+            dayName = "Sexta";
+        } else {
+            dayName = "Sabado";
+        }
+        return dayName;
     }
 
     public static boolean obterUmTipo() {
@@ -81,31 +102,75 @@ public class TCA_AgndCConsulta {
         return comando;
     }
 
-    public static void imprimirComOTipo(String[][] paginasBackup, String mes, String dia, String tipo) {
+    public static void imprimirComOTipo(String[][] paginasBkp, String mes, String dia, String tipo) {
 
-        for (int i = 0; i < paginasBackup.length; i++) {
-            if (mes.equals(paginasBackup[i][0])) {
-                if (dia.equals(paginasBackup[i][1])) {
-                    if (tipo.equals(paginasBackup[i][2])) {
-                        for (int j = 0; j < 4; j++) {
-                            System.out.println(paginasBackup[i][j]);
-                        }
+        String qualMes = encontrarNomeMes(mes);
+        String tipoAtv = nomearTipo(tipo);
+        String qualDia = findDayName(dia);
+
+        for (int i = 0; i < paginasBkp.length; i++) {
+            if (mes.equals(paginasBkp[i][0])) {
+                if (dia.equals(paginasBkp[i][1])) {
+                    if (tipo.equals(paginasBkp[i][2])) {
+                        System.out.println("=====================================================================");
+                        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", mes,
+                                qualMes, dia, qualDia, tipoAtv);
+                        System.out.println(paginasBkp[i][3]);
+                        System.out.println("=====================================================================");
                     }
                 }
             }
         }
     }
 
-    public static void imprimirRegistro(String[][] paginasBackup, String mes, String dia) {
-        for (int i = 0; i < paginasBackup.length; i++) {
-            if (mes == paginasBackup[i][0]) {
-                if (dia == paginasBackup[i][1]) {
-                    for (int j = 0; j < 4; j++) {
-                        System.out.println(paginasBackup[i][j]);// """""""""
-                    }
+    public static String nomearTipo(String tipo) {
+        String tipoName = null;
+        if (tipo.equals("P") || tipo.equals("p")) {
+            tipoName = "Pessoal";
+        } else {
+            tipoName = "Estudantil";
+        }
+        return tipoName;
+    }
+
+    public static void imprimirRegistro(String[][] paginasBkp, String mes, String dia) {
+
+        String qualMes = encontrarNomeMes(mes);
+        String qualDia = findDayName(dia);
+
+        for (int i = 0; i < paginasBkp.length; i++) {
+            if (mes.equals(paginasBkp[i][0])) {
+                if (dia.equals(paginasBkp[i][1])) {
+                    System.out.println("=====================================================================");
+                    System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", mes, qualMes, dia,
+                            qualDia);
+                    System.out.println(paginasBkp[i][3]);
+                    System.out.println("=====================================================================");
+
                 }
             }
         }
+    }
+
+    public static int convetSringToInt(String numString) {
+        int numInt = 0;
+        numInt = Integer.parseInt(numString);
+        return numInt;
+    }
+
+    public static String encontrarNomeMes(String mes) {
+        final String[] meses = { "mestre ODA!", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho",
+                "Agosto",
+                "Setembro", "Outubro", "Novembro", "Dezembro" };
+        String mesName = null;
+        int mesNum = convetSringToInt(mes);
+
+        for (int i = 1; i < meses.length; i++) {
+            if (mesNum == i) {
+                mesName = meses[i];
+            }
+        }
+        return mesName;
     }
 
     public static int lerComandoUsuario() {
@@ -184,9 +249,9 @@ public class TCA_AgndCConsulta {
         while (true) {
             System.out.println("ler char do tipo");// ----
             tipo = lerChar();
-            if (tipo == 'P') {
+            if (tipo == 'P' || tipo == 'p') {
                 break;
-            } else if (tipo == 'E') {
+            } else if (tipo == 'E' || tipo == 'e') {
                 break;
             }
         }
@@ -232,11 +297,6 @@ public class TCA_AgndCConsulta {
         return matrizString;
     }
 
-    public static int[][] criarMatrizInt(int linhas, final int colunas) {
-        int[][] matrizString = new int[linhas][colunas];
-        return matrizString;
-    }
-
     public static int lerNumInt() {
         int x = 0;
         do {
@@ -246,60 +306,9 @@ public class TCA_AgndCConsulta {
         return x;
     }
 
-    // public static boolean verificarComandoParaTutorial() {
-    // boolean repetir = false;
-    //
-    // int comando = lerNumInt();
-    // if (comando == 3) {
-    // repetir = true;
-    // }
-    // return repetir;
-    // }
-
     public static void imprimirTutorial() {
         final String formato = "MM/DD/TIPO/REGISTRO";
         final String exemplo = "10/31/(P)/Halloween";
-        System.out.println();
-        System.out.println("____________________");
-        System.out.println("Como REGISTRAR: ");
-        System.out.println("Digite DIAS em NUMEROS INTEIROS");
-        System.out.println("Digite MÊS em NUMEROS INTEIROS");
-        System.out.println("Digite TIPO em 1 Caractere baseado no significado abaixo: ");
-        System.out.println("[P] = Registro PESSOAL");
-        System.out.println("[E] = Registro ESTUDANTIL");
-        System.out.println("Digite na ordem: " + formato);
-        System.out.println("Exemplo: " + exemplo);
-        System.out.println("____________________");
-        System.out.println();
-
-        System.out.println();
-        System.out.println("____________________");
-        System.out.println("Como CONSULTAR: ");
-        System.out.println("Digite o mês que deseja consultar");
-        System.out.println("Digite em seguida o DIA(S) que deseja consultar");
-        System.out.println("Digite um caractere baseado na tabela abaixo: ");
-        System.out.println("[1] = Consultar APENAS os REGISTROS do tipo PESSOAL");
-        System.out.println("[2] = Consultar APENAS os REGISTROS do tipo ESTUDANTIL");
-        System.out.println("[3] = Consultar registros de TODOS OS TIPOS");
-        System.out.println("Exemplo: ");
-
-        System.out.println("Mês: 10");
-        System.out.println("Dia: 31");
-        System.out.println("1");
-
-        System.out.println("_______RELATORIO_______");
-        System.out.println("No dia 31 do Mês 10 você tem: ");
-
-        System.out.println();
-
-        System.out.println("----------------------------------------------------------");
-        System.out.println("1- para REGISTRAR ");
-        System.out.println("2- para CONSULTAR REGISTROS");
-        System.out.println("3- para ver como operar a agenda");
-        System.out.println("0- para encerrar o programa");
-        System.out.println("----------------------------------------------------------");
-
-        System.out.println("O que você deseja fazer?");
 
     }
 
@@ -310,75 +319,11 @@ public class TCA_AgndCConsulta {
         System.out.println("1- para REGISTRAR ");
         System.out.println("2- para CONSULTAR REGISTROS");
         System.out.println("3- para ver como operar a agenda");
+        System.out.println("4- para imprimir o MENU novamente");
         System.out.println("0- para encerrar o programa");
         System.out.println("----------------------------------------------------------");
 
         System.out.println("O que você deseja fazer?");
     }
 
-    public static void NumerarDia(String[][] paginasBackup, String[] dias) {
-        Integer dia = 0;
-        for (int i = 0; i < paginasBackup.length; i++) {
-            dia = Integer.parseInt(paginasBackup[i][1]);
-            /*
-             * if (dia == 1) {
-             * paginasBackup[i][1] = "Domingo";
-             * } else {
-             * if (dia == 2) {
-             * paginasBackup[i][1] = "Tegunda";
-             * } else {
-             * if (dia == 3) {
-             * paginasBackup[i][1] = "Terça";
-             * } else {
-             * if (dia == 4) {
-             * 
-             * } else {
-             * if (dia == 5) {
-             * paginasBackup[i][1] = "Quinta";
-             * }
-             * if (dia == 6) {
-             * paginasBackup[i][1] = "Sexta";
-             * } else {
-             * paginasBackup[i][1] = "Sabado";
-             * }
-             * }
-             * }
-             * }
-             * }
-             */
-
-            switch (dia) {
-                case 1:
-                    paginasBackup[i][1] = "Domingo";
-                    break;
-
-                case 2:
-                    paginasBackup[i][1] = "Segunda";
-                    break;
-
-                case 3:
-                    paginasBackup[i][1] = "Terça";
-                    break;
-
-                case 4:
-                    paginasBackup[i][1] = "Quarta";
-                    break;
-
-                case 5:
-                    paginasBackup[i][1] = "Quinta";
-                    break;
-
-                case 6:
-                    paginasBackup[i][1] = "Sexta";
-                    break;
-
-                case 7:
-                    paginasBackup[i][1] = "Sabado";
-                    break;
-            }
-             if (dia>7) {
-                System.out.println("Prezado Senhor USUARIO , Vossa mercê DEVE INSERIR UM DIA DA SEMANA 1~7 !DIAS!");
-             }
-        }
-    }
 }
