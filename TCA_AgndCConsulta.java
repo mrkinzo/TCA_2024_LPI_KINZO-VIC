@@ -15,7 +15,6 @@ public class TCA_AgndCConsulta {
         int comando = 0;
         String[][] paginasBackup = criarMatrizString(372, 4); // QTD MAXIMA DE REGISTROS
         do {
-            System.out.println("ler comando");// ----------
             comando = lerComandoUsuario();
             // [0] = mes , [1] dia , [2] tipo , [3] = log
             switch (comando) {
@@ -96,7 +95,7 @@ public class TCA_AgndCConsulta {
     public static int lerComandoDefinidor() {
         int comando = 0;
         do {
-            System.out.println("comando definidor");// ----------
+      
             comando = lerNumInt();
         } while (comando < 1 || comando > 2);
         return comando;
@@ -325,5 +324,7 @@ public class TCA_AgndCConsulta {
 
         System.out.println("O que você deseja fazer?");
     }
+
+    public static void 
 
 }
