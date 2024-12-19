@@ -44,28 +44,10 @@ public class TCA {
 
     }
 
-    public static void printMonth(String[][]paginasBkp,String mes ,String tipo,String dia){
-        String qualMes = encontrarNomeMes(mes);
-        String tipoAtv = nomearTipo(tipo);
-        String qualDia = findDayName(dia);
-
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes.equals(paginasBkp[i][0])) {
-                if (dia.equals(paginasBkp[i][1])) {
-                    System.out.println("=====================================================================");
-                    System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", mes,
-                            qualMes, dia, qualDia, tipoAtv);
-                    System.out.println(paginasBkp[i][3]);
-                    System.out.println("=====================================================================");
-                }
-           } 
-        }
-    }
-
     public static String[][] startMatriz(String[][] matriz) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
-                if (j % 2 == 0) {
+                if (i % 2 == 0) {
                     matriz[i][j] = "Mestre yOda";
                 } else {
                     matriz[i][j] = "Senhor lózão";
@@ -154,6 +136,8 @@ public class TCA {
                         System.out.println("=====================================================================");
                     }
                 }
+            } else {
+                System.out.printf("%s ", paginasBkp[i][3]);
             }
         }
     }
@@ -183,6 +167,8 @@ public class TCA {
                     System.out.println("=====================================================================");
 
                 }
+            } else {
+                System.out.printf("%s ", paginasBkp[i][3]);
             }
         }
     }
