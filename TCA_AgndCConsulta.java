@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class TCA {
+public class TCA_AgndCConsulta {
     final static Scanner LER = new Scanner(System.in);
 
     public static void main(String[] args) throws InterruptedException {
@@ -14,10 +14,10 @@ public class TCA {
     public static void utilizarFuncoes() throws InterruptedException {
         int comando = 0;
         String[][] paginasBackup = criarMatrizString(372, 4); // QTD MAXIMA DE REGISTROS colunas: [0] = mes , [1] dia ,
-                                                              // // [2] tipo , [3] = log
-        paginasBackup = startMatriz(paginasBackup);
+                                                              // [2] tipo , [3] = log
+
         do {
-            System.out.print("Digite o comando: ");
+
             comando = lerComandoUsuario();
             switch (comando) {
                 case 1:
@@ -26,13 +26,9 @@ public class TCA {
                     paginasBackup = registrarLogs(paginasBackup);
                     break;
                 case 2:
-                    System.out.println("Obtendo dados...");
-                    Thread.sleep(1500);
                     consultar(paginasBackup);
                     break;
                 case 3:
-                    System.out.println("Abrindo o tutorial...");
-                    Thread.sleep(1000);
                     imprimirTutorial();
                     break;
                 case 4:
@@ -44,38 +40,23 @@ public class TCA {
 
     }
 
-    public static String[][] startMatriz(String[][] matriz) {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
-                if (j % 2 == 0) {
-                    matriz[i][j] = "Mestre yOda";
-                } else {
-                    matriz[i][j] = "Senhor lózão";
-                }
-            }
-        }
-        return matriz;
-    }
-
     public static void consultar(String[][] paginasBkp) {
         String mes = null;
         String dia = null;
         String tipo = null;
         boolean definirTipo = false;
 
-        System.out.print("Digite o mes que deseja consultar: ");
         mes = lerMes();
-        System.out.print("Digite o dia que deseja consultar: ");
         dia = lerDia();
         definirTipo = obterUmTipo();
         if (definirTipo) {
             tipo = lerTipo();
             imprimirComOTipo(paginasBkp, mes, dia, tipo);
         } else {
-            imprimirRegistro(paginasBkp, mes, dia);
-        }
+            imprimirRegistroDiaMes(paginasBkp, mes, dia);
 
     }
+}
 
     public static String findDayName(String dia) {
         String dayName = null;
@@ -150,7 +131,7 @@ public class TCA {
         return tipoName;
     }
 
-    public static void imprimirRegistro(String[][] paginasBkp, String mes, String dia) {
+    public static void imprimirRegistroDiaMes(String[][] paginasBkp, String mes, String dia) {
 
         String qualMes = encontrarNomeMes(mes);
         String qualDia = findDayName(dia);
@@ -194,7 +175,7 @@ public class TCA {
         int comando = 0;
         do {
             comando = lerNumInt();
-        } while (comando < 0 || comando > 4);
+        } while (comando < 0 || comando > 3);
         return comando;
     }
 
@@ -319,55 +300,49 @@ public class TCA {
         return x;
     }
 
-    public static void imprimirTutorial() throws InterruptedException {
+    public static void imprimirTutorial() {
 
         System.out.println("----------------------------------------------------------");
-        System.out.println("               TUTORIAL: Agenda com Consulta              ");
+        System.out.println(" TUTORIAL: Agenda com Consulta ");
         System.out.println("----------------------------------------------------------");
         System.out.println("Bem-vindo à Agenda com Consulta! Aqui estão as instruções:");
-        Thread.sleep(1000);
         System.out.println();
         System.out.println("1. MENU PRINCIPAL:");
-        System.out.println("   - Escolha uma das opções disponíveis:");
-        System.out.println("     1 - Registrar novos logs");
-        System.out.println("     2 - Consultar registros existentes");
-        System.out.println("     3 - Ver este tutorial novamente");
-        System.out.println("     4 - Reimprimir o menu principal");
-        System.out.println("     0 - Encerrar o programa");
-        Thread.sleep(1000);
+        System.out.println(" - Escolha uma das opções disponíveis:");
+        System.out.println(" 1 - Registrar novos logs");
+        System.out.println(" 2 - Consultar registros existentes");
+        System.out.println(" 3 - Ver este tutorial novamente");
+        System.out.println(" 4 - Reimprimir o menu principal");
+        System.out.println(" 0 - Encerrar o programa");
         System.out.println();
         System.out.println("2. COMO REGISTRAR LOGS:");
-        System.out.println("   - Escolha a opção 1 no menu.");
-        System.out.println("   - Informe a quantidade de registros que deseja adicionar.");
-        System.out.println("   - Para cada registro, insira:");
-        System.out.println("     > Mês: Número entre 1 e 12.");
-        System.out.println("     > Dia: Número entre 1 e 31.");
-        System.out.println("     > Tipo: 'P' (Pessoal) ou 'E' (Estudantil).");
-        System.out.println("     > Log: Descrição do registro.");
-        Thread.sleep(1000);
+        System.out.println(" - Escolha a opção 1 no menu.");
+        System.out.println(" - Informe a quantidade de registros que deseja adicionar.");
+        System.out.println(" - Para cada registro, insira:");
+        System.out.println(" > Mês: Número entre 1 e 12.");
+        System.out.println(" > Dia: Número entre 1 e 31.");
+        System.out.println(" > Tipo: 'P' (Pessoal) ou 'E' (Estudantil).");
+        System.out.println(" > Log: Descrição do registro.");
         System.out.println();
         System.out.println("3. COMO CONSULTAR REGISTROS:");
-        System.out.println("   - Escolha a opção 2 no menu.");
-        System.out.println("   - Informe:");
-        System.out.println("     > Mês: Número correspondente ao mês.");
-        System.out.println("     > Dia: Número do dia.");
-        System.out.println("   - Escolha se deseja filtrar por tipo ('P' ou 'E').");
-        System.out.println("   - O programa exibirá os registros correspondentes.");
-        Thread.sleep(1000);
+        System.out.println(" - Escolha a opção 2 no menu.");
+        System.out.println(" - Informe:");
+        System.out.println(" > Mês: Número correspondente ao mês.");
+        System.out.println(" > Dia: Número do dia.");
+        System.out.println(" - Escolha se deseja filtrar por tipo ('P' ou 'E').");
+        System.out.println(" - O programa exibirá os registros correspondentes.");
         System.out.println();
         System.out.println("4. COMO REIMPRIMIR O MENU:");
-        System.out.println("   - Escolha a opção 4 para exibir o menu novamente.");
-        Thread.sleep(500);
+        System.out.println(" - Escolha a opção 4 para exibir o menu novamente.");
         System.out.println();
         System.out.println("5. COMO ENCERRAR O PROGRAMA:");
-        System.out.println("   - Escolha a opção 0 para sair.");
-        Thread.sleep(500);
+        System.out.println(" - Escolha a opção 0 para sair.");
         System.out.println();
         System.out.println("6. EXEMPLO:");
-        System.out.println("   - Registro:");
-        System.out.println("     > Mês: 10 | Dia: 31 | Tipo: P | Log: \"Halloween\"");
-        System.out.println("   - Consulta:");
-        System.out.println("     Resultado: \"No mês 10 - Outubro, no dia 31 - Terça, do tipo Pessoal: Halloween.\"");
+        System.out.println(" - Registro:");
+        System.out.println(" > Mês: 10 | Dia: 31 | Tipo: P | Log: \"Halloween\"");
+        System.out.println(" - Consulta:");
+        System.out.println(" Resultado: \"No mês 10 - Outubro, no dia 31 - Terça, do tipo Pessoal: Halloween.\"");
         System.out.println("----------------------------------------------------------");
 
         System.out.println("O que você deseja fazer?");
@@ -386,5 +361,29 @@ public class TCA {
 
         System.out.println("O que você deseja fazer?");
     }
+    public static void printMonth(String[][]paginasBkp,String mes,String dia){
+        String qualMes = encontrarNomeMes(mes);
+        
+        for (int i = 0; i < paginasBkp.length; i++) {
+            if (mes.equals(paginasBkp[i][0])) {
+                
+                        System.out.println("=====================================================================");
+                        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", paginasBkp[i][0],qualMes, paginasBkp[i][1], qualDia);
+                        System.out.println(paginasBkp[i][3]);
+                        System.out.println("=====================================================================");
+            }
+        }
+     }
 
-}
+    public static void printYear(String[][]paginasBkp){
+        for (int i = 0; i < paginasBkp.length-10; i++) {
+        String qualMes = encontrarNomeMes(paginasBkp[i][0]);
+        String qualDia = findDayName(paginasBkp[i][1]);
+               
+        System.out.println("=====================================================================");
+        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", paginasBkp[i][0],qualMes, paginasBkp[i][1], qualDia);
+        System.out.println(paginasBkp[i][3]);
+        System.out.println("=====================================================================");        
+                }
+            }
+        }
