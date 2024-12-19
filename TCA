@@ -1,13 +1,10 @@
+
 import java.util.Scanner;
 
-public class TCA {
+public class TCA_AgndCConsulta {
     final static Scanner LER = new Scanner(System.in);
 
-    static String[][] paginasBackup = criarMatrizString(372, 4);
-
     public static void main(String[] args) throws InterruptedException {
-        // QTD MAXIMA DE REGISTROS colunas: [0] = mes , [1] dia ,
-        // [2] tipo , [3] = log
 
         imprimirMenu();
 
@@ -17,9 +14,11 @@ public class TCA {
 
     public static void utilizarFuncoes() throws InterruptedException {
         int comando = 0;
-        paginasBackup = startMatriz(paginasBackup);
+        String[][] paginasBackup = criarMatrizString(372, 4); // QTD MAXIMA DE REGISTROS colunas: [0] = mes , [1] dia ,
+                                                              // [2] tipo , [3] = log
+
         do {
-            System.out.print("Digite o comando: ");
+
             comando = lerComandoUsuario();
             switch (comando) {
                 case 1:
@@ -28,195 +27,37 @@ public class TCA {
                     paginasBackup = registrarLogs(paginasBackup);
                     break;
                 case 2:
-                    System.out.println("Obtendo dados...");
-                    Thread.sleep(1500);
                     consultar(paginasBackup);
                     break;
                 case 3:
-                    System.out.println("Abrindo o tutorial...");
-                    Thread.sleep(1000);
                     imprimirTutorial();
                     break;
                 case 4:
-                    System.out.println("Obtendo menu...");
-                    Thread.sleep(1000);
                     imprimirMenu();
+                    break;
             }
 
         } while (comando != 0);
 
     }
 
-    public static String[][] startMatriz(String[][] matriz) {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
-                if (i % 2 == 0) {
-                    matriz[i][j] = "Mestre yOda";
-                } else {
-                    matriz[i][j] = "Senhor lózão";
-                }
-            }
-        }
-        return matriz;
-    }
-
     public static void consultar(String[][] paginasBkp) {
         String mes = null;
         String dia = null;
         String tipo = null;
+        boolean definirTipo = false;
 
-        imprimirMenuConsulta();
-        int comando = lerComandoConsulta();
-
-        switch (comando) {
-            case 1:
-                printYear(paginasBkp);
-                break;
-            case 2:
-                mes = lerMes();
-                printMonth(paginasBkp, mes);
-                break;
-            case 3:
-                mes = lerMes();
-                dia = lerDia();
-                imprimirMesEDia(paginasBkp, mes, dia);
-                break;
-            case 4:
-                mes = lerMes();
-                dia = lerDia();
-                tipo = lerTipo();
-                imprimirMesEDiaComTipo(paginasBkp, mes, dia, tipo);
-                break;
-            case 5:
-                mes = lerMes();
-                tipo = lerTipo();
-                printMonthPlusType(paginasBkp, mes, tipo);
-                break;
-
-        }
-    }
-
-    public static void imprimirMenuConsulta() {
-        System.out.println();
-        System.out.println("----------------------------------------------------------");
-        System.out.println();
-        System.out.println("[1] - Relatar os registros de um ano inteiro sem filtros;");
-        System.out.println("[2] - Relatar os registros de um mes inteiro sem filtros;");
-        System.out.println("[3] - Relatar os registros de um mes e um dia sem filtros");
-        System.out.println("[4] - Relatar os registros de um mes e um dia com filtro");
-        System.out.println("[5] - Relatar um mes inteiro com filtros;");
-        System.out.println("[6] - para.....");
-        System.out.println();
-        System.out.println("----------------------------------------------------------");
-        System.out.println();
+        mes = lerMes();
+        dia = lerDia();
+        definirTipo = obterUmTipo();
+        if (definirTipo) {
+            tipo = lerTipo();
+            imprimirComOTipo(paginasBkp, mes, dia, tipo);
+        } else {
+            imprimirRegistroDiaMes(paginasBkp, mes, dia);
 
     }
-
-    public static int lerComandoConsulta() {
-        int comando = 0;
-        do {
-            System.out.print("Insira seu comando: ");
-            comando = lerNumInt();
-        } while (comando < 1 || comando > 6);
-        return comando;
-    }
-
-    public static void imprimirMesEDia(String[][] paginasBkp, String mes, String dia) {
-
-        String qualMes = encontrarNomeMes(mes);
-        String qualDia = findDayName(dia);
-
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes.equals(paginasBkp[i][0])) {
-                if (dia.equals(paginasBkp[i][1])) {
-                    System.out.println("=====================================================================");
-                    System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", mes, qualMes, dia,
-                            qualDia);
-                    System.out.println(paginasBkp[i][3]);
-                    System.out.println("=====================================================================");
-
-                }
-            }
-        }
-    }
-
-    public static void imprimirMesEDiaComTipo(String[][] paginasBkp, String mes, String dia, String tipo) {
-
-        String qualMes = encontrarNomeMes(mes);
-        String tipoAtv = nomearTipo(tipo);
-        String qualDia = findDayName(dia);
-
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes.equals(paginasBkp[i][0])) {
-                if (dia.equals(paginasBkp[i][1])) {
-                    if (tipo.equals(paginasBkp[i][2])) {
-                        System.out.println("=====================================================================");
-                        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", mes,
-                                qualMes, dia, qualDia, tipoAtv);
-                        System.out.println(paginasBkp[i][3]);
-                        System.out.println("=====================================================================");
-                    }
-                }
-            }
-        }
-    }
-
-    public static void printMonthPlusType(String[][] paginasBkp, String mes, String tipo) {
-
-        String qualMes = encontrarNomeMes(mes);
-        String qualTipo = nomearTipo(tipo);
-
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes.equals(paginasBkp[i][0])) {
-                if (tipo.equals(paginasBkp[i][2])) {
-                    String qualDia = findDayName(paginasBkp[i][1]);
-
-                    System.out.println("=====================================================================");
-                    System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", paginasBkp[i][0], qualMes,
-                            paginasBkp[i][1], qualDia, qualTipo);
-                    System.out.println(paginasBkp[i][3]);
-                    System.out.println("=====================================================================");
-                }
-            }
-        }
-    }
-
-    public static void printMonth(String[][] paginasBkp, String mes) {
-        String qualMes = encontrarNomeMes(mes);
-
-        for (int i = 0; i < paginasBkp.length; i++) {
-            if (mes.equals(paginasBkp[i][0])) {
-                String qualDia = findDayName(paginasBkp[i][1]);
-                String qualTipo = nomearTipo(paginasBkp[i][2]);
-
-                System.out.println("=====================================================================");
-                System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", paginasBkp[i][0], qualMes,
-                        paginasBkp[i][1], qualTipo, qualDia);
-                System.out.println(paginasBkp[i][3]);
-                System.out.println("=====================================================================");
-            }
-        }
-    }
-
-    public static void printYear(String[][] paginasBkp) {
-        for (int i = 0; i < paginasBkp.length - 10; i++) {
-            if (paginasBkp[i][3] != "Mestre yOda" || paginasBkp[i][3] != "Senhor lózão") {
-                String qualMes = encontrarNomeMes(paginasBkp[i][0]);
-                String qualDia = findDayName(paginasBkp[i][1]);
-                String qualTipo = nomearTipo(paginasBkp[i][2]);
-
-                System.out.println("=====================================================================");
-                System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", paginasBkp[i][0],
-                        qualMes, paginasBkp[i][1], qualTipo, qualDia);
-                System.out.println(paginasBkp[i][3]);
-                System.out.println("=====================================================================");
-
-            } else {
-
-            }
-
-        }
-    }
+}
 
     public static String findDayName(String dia) {
         String dayName = null;
@@ -239,6 +80,48 @@ public class TCA {
         return dayName;
     }
 
+    public static boolean obterUmTipo() {
+        boolean definirSeHáUmTipo = false;
+        int comando = 0;
+        System.out.println("Deseja definir imprimir apenas logs de um tipo especifico?");
+        System.out.println("1 - sim | 2- não");
+        comando = lerComandoDefinidor();
+        if (comando == 1) {
+            definirSeHáUmTipo = true;
+        }
+        return definirSeHáUmTipo;
+
+    }
+
+    public static int lerComandoDefinidor() {
+        int comando = 0;
+        do {
+            comando = lerNumInt();
+        } while (comando < 1 || comando > 2);
+        return comando;
+    }
+
+    public static void imprimirComOTipo(String[][] paginasBkp, String mes, String dia, String tipo) {
+
+        String qualMes = encontrarNomeMes(mes);
+        String tipoAtv = nomearTipo(tipo);
+        String qualDia = findDayName(dia);
+
+        for (int i = 0; i < paginasBkp.length; i++) {
+            if (mes.equals(paginasBkp[i][0])) {
+                if (dia.equals(paginasBkp[i][1])) {
+                    if (tipo.equals(paginasBkp[i][2])) {
+                        System.out.println("=====================================================================");
+                        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", mes,
+                                qualMes, dia, qualDia, tipoAtv);
+                        System.out.println(paginasBkp[i][3]);
+                        System.out.println("=====================================================================");
+                    }
+                }
+            }
+        }
+    }
+
     public static String nomearTipo(String tipo) {
         String tipoName = null;
         if (tipo.equals("P") || tipo.equals("p")) {
@@ -247,6 +130,25 @@ public class TCA {
             tipoName = "Estudantil";
         }
         return tipoName;
+    }
+
+    public static void imprimirRegistroDiaMes(String[][] paginasBkp, String mes, String dia) {
+
+        String qualMes = encontrarNomeMes(mes);
+        String qualDia = findDayName(dia);
+
+        for (int i = 0; i < paginasBkp.length; i++) {
+            if (mes.equals(paginasBkp[i][0])) {
+                if (dia.equals(paginasBkp[i][1])) {
+                    System.out.println("=====================================================================");
+                    System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", mes, qualMes, dia,
+                            qualDia);
+                    System.out.println(paginasBkp[i][3]);
+                    System.out.println("=====================================================================");
+
+                }
+            }
+        }
     }
 
     public static int convetSringToInt(String numString) {
@@ -279,6 +181,7 @@ public class TCA {
     }
 
     public static String[][] registrarLogs(String[][] paginasBackup) {
+        System.out.print("Insira quantidade de registros desejada: ");
         int qtdLog = lerNumInt();
         String[][] paginas = criarMatrizString(qtdLog, 4);// [0] = mes , [1] dia , [2] tipo , [3] = log
         paginas = registrar(paginas);
@@ -342,7 +245,6 @@ public class TCA {
         char tipo = ' ';
         String tipoString = null;
         while (true) {
-            System.out.println("ler char do tipo");// ----
             tipo = lerChar();
             if (tipo == 'P' || tipo == 'p') {
                 break;
@@ -367,7 +269,6 @@ public class TCA {
 
         String dia = null;
         do {
-            System.out.println("ler int do dia");// ----
             diaEmNumero = lerNumInt();
         } while (diaEmNumero < 1 || diaEmNumero > 31);
 
@@ -379,7 +280,6 @@ public class TCA {
         int mesEmNumero = 0;
         String mes = "";
         do {
-            System.out.println("ler int do mes");// ----
             mesEmNumero = lerNumInt();
         } while (mesEmNumero < 1 || mesEmNumero > 12);
 
@@ -401,13 +301,12 @@ public class TCA {
         return x;
     }
 
-    public static void imprimirTutorial() throws InterruptedException {
+    public static void imprimirTutorial() {
 
         System.out.println("----------------------------------------------------------");
         System.out.println(" TUTORIAL: Agenda com Consulta ");
         System.out.println("----------------------------------------------------------");
         System.out.println("Bem-vindo à Agenda com Consulta! Aqui estão as instruções:");
-        Thread.sleep(1000);
         System.out.println();
         System.out.println("1. MENU PRINCIPAL:");
         System.out.println(" - Escolha uma das opções disponíveis:");
@@ -416,7 +315,6 @@ public class TCA {
         System.out.println(" 3 - Ver este tutorial novamente");
         System.out.println(" 4 - Reimprimir o menu principal");
         System.out.println(" 0 - Encerrar o programa");
-        Thread.sleep(1000);
         System.out.println();
         System.out.println("2. COMO REGISTRAR LOGS:");
         System.out.println(" - Escolha a opção 1 no menu.");
@@ -426,25 +324,20 @@ public class TCA {
         System.out.println(" > Dia: Número entre 1 e 31.");
         System.out.println(" > Tipo: 'P' (Pessoal) ou 'E' (Estudantil).");
         System.out.println(" > Log: Descrição do registro.");
-        Thread.sleep(1000);
         System.out.println();
         System.out.println("3. COMO CONSULTAR REGISTROS:");
         System.out.println(" - Escolha a opção 2 no menu.");
-        System.out.println(" - Configure sua consulta.");
         System.out.println(" - Informe:");
         System.out.println(" > Mês: Número correspondente ao mês.");
         System.out.println(" > Dia: Número do dia.");
         System.out.println(" - Escolha se deseja filtrar por tipo ('P' ou 'E').");
         System.out.println(" - O programa exibirá os registros correspondentes.");
-        Thread.sleep(1000);
         System.out.println();
         System.out.println("4. COMO REIMPRIMIR O MENU:");
         System.out.println(" - Escolha a opção 4 para exibir o menu novamente.");
-        Thread.sleep(500);
         System.out.println();
         System.out.println("5. COMO ENCERRAR O PROGRAMA:");
         System.out.println(" - Escolha a opção 0 para sair.");
-        Thread.sleep(500);
         System.out.println();
         System.out.println("6. EXEMPLO:");
         System.out.println(" - Registro:");
@@ -459,7 +352,7 @@ public class TCA {
     public static void imprimirMenu() {
 
         System.out.println("----------------------------------------------------------");
-        System.out.println("_Agenda com consulta_");
+        System.out.println("Agenda com consulta");
         System.out.println("1- para REGISTRAR ");
         System.out.println("2- para CONSULTAR REGISTROS");
         System.out.println("3- para ver como operar a agenda");
@@ -469,5 +362,29 @@ public class TCA {
 
         System.out.println("O que você deseja fazer?");
     }
+    public static void printMonth(String[][]paginasBkp,String mes,String dia){
+        String qualMes = encontrarNomeMes(mes);
+        
+        for (int i = 0; i < paginasBkp.length; i++) {
+            if (mes.equals(paginasBkp[i][0])) {
+                
+                        System.out.println("=====================================================================");
+                        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Você registrou: ", paginasBkp[i][0],qualMes, paginasBkp[i][1], qualDia);
+                        System.out.println(paginasBkp[i][3]);
+                        System.out.println("=====================================================================");
+            }
+        }
+     }
 
-}
+    public static void printYear(String[][]paginasBkp){
+        for (int i = 0; i < paginasBkp.length-10; i++) {
+        String qualMes = encontrarNomeMes(paginasBkp[i][0]);
+        String qualDia = findDayName(paginasBkp[i][1]);
+               
+        System.out.println("=====================================================================");
+        System.out.printf("No mês: %s - %s\n No dia %s - %s\n Do tipo %s\n Você registrou: ", paginasBkp[i][0],qualMes, paginasBkp[i][1], qualDia);
+        System.out.println(paginasBkp[i][3]);
+        System.out.println("=====================================================================");        
+                }
+            }
+        }
