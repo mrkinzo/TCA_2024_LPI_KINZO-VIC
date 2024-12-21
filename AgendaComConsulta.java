@@ -91,7 +91,7 @@ public class AgendaComConsulta {
                 Thread.sleep(1000);
                 for (int i = 0; i < 80; i++) {
                     Thread.sleep(500);
-                    // printReference();
+                     printReference();
                 }
                 break;
         }
